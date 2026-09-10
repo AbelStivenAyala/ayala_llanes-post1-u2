@@ -67,6 +67,14 @@ independiente por institución).
 - Java 17, Apache Maven, VS Code, Git, GitHub
 
 ## Conclusiones
-[Párrafo de 3-5 oraciones con los aprendizajes más relevantes de
-ambas partes, especialmente sobre el proceso de decidir entre
-patrones y no solo implementarlos]
+Este post-contenido mostró que elegir un patrón creacional no depende
+de una regla fija, sino de analizar la estructura real del problema:
+si hay una única variación o una familia de piezas que debe permanecer
+consistente. También evidenció que un mecanismo de resolución dinámico
+(registro con Map y Supplier) evita violar el principio de
+Abierto/Cerrado al extender el sistema. Con Builder, quedó claro cómo
+centralizar la validación de un objeto complejo antes de su
+construcción, evitando estados inconsistentes. Finalmente, evaluar la
+necesidad de Singleton con criterios objetivos —y no por costumbre—
+permitió concluir que no todo mecanismo centralizado requiere esa
+maquinaria adicional.
