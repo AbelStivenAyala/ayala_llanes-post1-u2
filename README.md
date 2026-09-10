@@ -31,3 +31,42 @@ Abierto/Cerrado (OCP). Con un registro basado en Map y Supplier, se
 puede registrar un formato nuevo (por ejemplo, "csv") simplemente
 llamando a ReportFactoryRegistry.register(...), sin tocar ninguna
 línea del código ya existente en la clase.
+
+### Decisión 3 — Builder vs. constructor telescópico vs. setters (Parte 2)
+Patrón elegido: Builder
+
+Justificación: Se descartó el constructor con los 9 parámetros porque
+el cliente debería recordar el orden exacto de los argumentos, y con
+varios parámetros del mismo tipo (String, boolean) es fácil invertirlos
+sin que el compilador lo detecte. Se descartaron los constructores
+sobrecargados porque, con 8 parámetros opcionales, el número de
+combinaciones razonables crece rápidamente y generaría demasiados
+constructores casi idénticos. Se descartó también una clase mutable
+con setters sueltos porque el objeto podría quedar a medio configurar,
+y no habría un punto único donde validar la consistencia de la
+combinación de valores (por ejemplo, exigir outputPath cuando
+compress=true). Builder resuelve las tres limitaciones: expone una
+API fluida y legible, y centraliza la validación de estados
+inconsistentes en build(), antes de construir el objeto.
+
+### Decisión 4 — ¿ReportFactoryRegistry necesita ser Singleton? (Parte 2)
+Conclusión: NO
+
+Justificación: El campo estático REGISTRY ya garantiza una única
+fuente de verdad por JVM sin necesidad de la maquinaria de Singleton
+(constructor privado con guardas + getInstance()). Además, no existe
+en el sistema ningún punto donde se necesite pasar el registro como
+objeto (mock, inyección por constructor), y su inicialización —llenar
+un Map con tres entradas— no es costosa, por lo que no se beneficia de
+inicialización perezosa. Convertirlo en Singleton agregaría ceremonia
+sin resolver un problema real, y de hecho limitaría un escenario
+futuro razonable (una plataforma multi-institución con un registro
+independiente por institución).
+
+## Herramientas utilizadas
+- Java 17, Apache Maven, VS Code, Git, GitHub
+
+## Conclusiones
+[Párrafo de 3-5 oraciones con los aprendizajes más relevantes de
+ambas partes, especialmente sobre el proceso de decidir entre
+patrones y no solo implementarlos]
